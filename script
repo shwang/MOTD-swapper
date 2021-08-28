@@ -1,0 +1,24 @@
+#!/bin/bash
+configdir='/Users/shwangster/.motd'
+configpath="${configdir}/config"
+
+if [[ ! -f "$configpath" ]]; then
+    echo -1 > "$configpath"
+fi
+
+prev=`cat $configpath`
+((next = prev + 1))
+
+motdpath="${configdir}/motd.${next}"
+if [[ -f $motdpath ]]; then
+    sudo cp $motdpath /etc/motd
+else
+    next=0
+    motdpath="${configdir}/motd.${next}"
+    [[ -f $motdpath ]] || { echo "$motdpath is not a file!" 1>&2; exit 1; }
+    sudo cp $motdpath /etc/motd
+fi
+
+echo $next > "$configpath"
+
+    
